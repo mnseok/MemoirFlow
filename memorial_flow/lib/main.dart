@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
-import 'package:memorial_flow/screens/second.screen.dart';
+import 'package:memorial_flow/screens/group.screen.dart';
+import 'package:memorial_flow/screens/profile.screen.dart';
+import 'package:memorial_flow/screens/write.screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: const MyHomePage(title: 'Memoir Flow'),
     );
@@ -36,9 +38,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
-    FirstScreen(),
-    SecondScreen(),
-    FirstScreen(),
+    MainScreen(date: '3월 1일'),
+    const GroupScreen(),
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -59,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 30,
                 fontWeight: FontWeight.w700),
           ),
+
           // leading: IconButton(
           //     icon: Icon(Icons.menu), onPressed: () => {print("hi")}),
         ),
@@ -97,18 +100,20 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SecondScreen()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const Write(data: 'Write Screen mockup')),
             );
           },
           tooltip: 'Increment',
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.border_color),
         ), // This trailing comma makes auto-formatting nicer for build methods.
 
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.padding),
+              icon: Icon(Icons.home),
               label: 'Main',
             ),
             BottomNavigationBarItem(
