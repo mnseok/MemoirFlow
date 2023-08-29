@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Memorial } from './memorial.entity';
 
 @Entity('user')
 export class User {
@@ -20,4 +21,7 @@ export class User {
   @IsNotEmpty()
   @IsString()
   nickname: string;
+
+  @OneToMany(() => Memorial, (memorial) => memorial.user)
+  memorials: Memorial[];
 }

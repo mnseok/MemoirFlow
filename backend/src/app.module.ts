@@ -8,6 +8,8 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { User } from './entitiies/user.entity';
+import { Memorial } from './entitiies/memorial.entity';
+import { MemorialModule } from './memorial/memorial.module';
 dotenv.config();
 
 @Module({
@@ -22,10 +24,11 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       synchronize: true,
       logging: true,
-      entities: [User],
+      entities: [User, Memorial],
     }),
     AuthModule,
     UserModule,
+    MemorialModule,
   ],
   controllers: [AppController],
   providers: [AppService],
