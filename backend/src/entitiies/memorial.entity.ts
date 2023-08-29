@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Time } from 'src/common/types/time.type';
+import { CustomDate } from 'src/common/types/customDate.type';
 
 @Entity('memorial')
 export class Memorial {
@@ -12,6 +13,9 @@ export class Memorial {
 
   @Column({ nullable: true })
   imageUrl: string;
+
+  @Column('date')
+  date: CustomDate;
 
   @Column('varchar')
   time: Time;

@@ -4,6 +4,10 @@ import { Time } from 'src/common/types/time.type';
 export class CreateMemorialDto {
   @IsNotEmpty()
   @IsString()
+  date: Date;
+
+  @IsNotEmpty()
+  @IsString()
   time: Time;
 
   @IsNotEmpty()

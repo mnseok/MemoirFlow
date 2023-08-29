@@ -4,6 +4,7 @@ import { Memorial } from 'src/entitiies/memorial.entity';
 import { User } from 'src/entitiies/user.entity';
 import { Repository } from 'typeorm';
 import { CreateMemorialDto } from './dto/create.memorial.dto';
+import { CustomDate } from 'src/common/types/customDate.type';
 
 @Injectable()
 export class MemorialService {
@@ -14,7 +15,11 @@ export class MemorialService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async postMemorial(userId: string, data: CreateMemorialDto) {
+  async postMemorial(
+    userId: string,
+    data: CreateMemorialDto,
+    date: CustomDate,
+  ) {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id = :userId', { userId })
@@ -26,25 +31,40 @@ export class MemorialService {
     const memorial = this.memorialRepository.create({
       ...data,
       user,
+      date,
     });
 
     return this.memorialRepository.save(memorial);
   }
 
-  getMemorialsByUser(userId) {
+  getMemorialsByUser(userId: string, date: CustomDate) {
     return this.memorialRepository.find({
       where: {
-        user: userId,
+        date,
+        user: { id: userId },
       },
     });
   }
 
-  getMemorialsByUserAndMemorialId(userId, memorialId) {
+  getMemorialsByUserAndMemorialId(memorialId: string) {
     return this.memorialRepository.findOne({
       where: {
-        user: userId,
         id: memorialId,
       },
     });
+  }
+
+  async updateMemorial(memorialId: string, data: CreateMemorialDto) {
+    const memorial = await this.memorialRepository.findOne({
+      where: {
+        id: memorialId,
+      },
+    });
+    if (!memorial) {
+      throw new NotFoundException('Memorial not found');
+    }
+
+    memorial.content = data.content;
+    return this.memorialRepository.save(memorial);
   }
 }
