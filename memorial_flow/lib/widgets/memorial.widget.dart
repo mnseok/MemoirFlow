@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Memorial extends StatelessWidget {
-  const Memorial({
+class MemorialWidget extends StatelessWidget {
+  const MemorialWidget({
     super.key,
     required this.content,
   });

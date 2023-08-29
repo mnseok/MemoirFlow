@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memorial_flow/widgets/calendar.widget.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -70,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
             padding: const EdgeInsets.all(8),
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
-              return Memorial(content: entries[index]);
+              return MemorialWidget(content: entries[index]);
             }));
   }
 }

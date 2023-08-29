@@ -10,22 +10,41 @@ class Write extends StatefulWidget {
 }
 
 class _WriteState extends State<Write> {
+  BuildContext? _context;
+
+  String content = '';
+  String time = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go back!'),
-        ),
-        Text(widget.data),
-      ],
-    )));
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            title: Text(
+              '글쓰기',
+              style: const TextStyle(
+                  fontFamily: 'OoohBaby',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.check),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ]),
+        body: Padding(
+          padding: EdgeInsets.all(20),
+          // child: loadBuilder(),
+        ));
   }
 }
