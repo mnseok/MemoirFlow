@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
 import 'package:memorial_flow/screens/profile.screen.dart';
+import 'package:memorial_flow/screens/signin.screen.dart';
 import 'package:memorial_flow/screens/write.screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://esrvbiydhlrulgpajcdk.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzcnZiaXlkaGxydWxncGFqY2RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1Mzg2NzIsImV4cCI6MjAwOTExNDY3Mn0.hXwAopE97t-m_SyhTIBUSInNCQYu3_Jpf6ny9ChDnB0',
+  );
+
   runApp(const MyApp());
 }
+
+final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -40,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _widgetOptions = <Widget>[
     MainScreen(date: '3월 1일'),
     const GroupScreen(),
-    const ProfileScreen(),
+    const SigninScreen(),
   ];
 
   void _onItemTapped(int index) {
