@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.date});
@@ -12,7 +13,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDay = DateTime.now();
-  final List<String> entries = <String>['a', 'b', 'c', 'd'];
+  final string = Supabase.instance.client.auth.toString();
+  final List<String> entries = <String>['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
   @override
   Widget build(BuildContext context) {

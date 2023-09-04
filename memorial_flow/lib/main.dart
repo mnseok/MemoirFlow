@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:memorial_flow/screens/login.screen.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
-import 'package:memorial_flow/screens/profile.screen.dart';
-import 'package:memorial_flow/screens/signin.screen.dart';
 import 'package:memorial_flow/screens/write.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
     url: 'https://esrvbiydhlrulgpajcdk.supabase.co',
     anonKey:
@@ -15,8 +16,6 @@ void main() async {
 
   runApp(const MyApp());
 }
-
-final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,9 +47,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
-    MainScreen(date: '3월 1일'),
+    const MainScreen(date: '3월 1일'),
     const GroupScreen(),
-    const SigninScreen(),
+    LoginScreen(),
   ];
 
   void _onItemTapped(int index) {
