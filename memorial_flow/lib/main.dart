@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memorial_flow/screens/login.screen.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
+import 'package:memorial_flow/screens/profile.screen.dart';
 import 'package:memorial_flow/screens/write.screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -49,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _widgetOptions = <Widget>[
     const MainScreen(date: '3월 1일'),
     const GroupScreen(),
-    LoginScreen(),
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

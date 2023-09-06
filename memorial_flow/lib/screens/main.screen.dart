@@ -1,21 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:memorial_flow/models/memorial.model.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'dart:developer';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.date});
 
   final String date;
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDay = DateTime.now();
-  final string = Supabase.instance.client.auth.toString();
-  final List<String> entries = <String>['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-
+  // final _memoirals = Supabase.instance.client.from('article').select();
+  List entries = ['a', 'b', 'c'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +71,26 @@ class _MainScreenState extends State<MainScreen> {
         ),
         body: ListView.builder(
             padding: const EdgeInsets.all(8),
+            // itemCount: entries.then((value) => value.length),
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
               return MemorialWidget(content: entries[index]);
-            }));
+            })
+        //   FutureBuilder(
+        // future: _memoirals,
+        // builder: (context, snapshot) {
+        //   if (!snapshot.hasData) {
+        //     return const Center(
+        //       child: CircularProgressIndicator(),
+        //     );
+        //   }
+        //   final List memoirals = snapshot.data as List;
+        //   return ListView.builder(
+        //     padding: const EdgeInsets.all(8),
+        //     itemCount: memoirals.length,
+        //     itemBuilder: (BuildContext context, int index) {
+        //       return MemorialWidget(content: memoirals[index].content);
+        //     },
+        );
   }
 }
