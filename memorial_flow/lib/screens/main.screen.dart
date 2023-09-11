@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:memorial_flow/models/memorial.model.dart';
+import 'package:memorial_flow/main.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
-import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'dart:developer';
 
 class MainScreen extends StatefulWidget {
@@ -15,9 +12,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final Future _memorials = fetchArticle();
+
   DateTime _selectedDay = DateTime.now();
-  // final _memoirals = Supabase.instance.client.from('article').select();
-  List entries = ['a', 'b', 'c'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,28 +67,38 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            // itemCount: entries.then((value) => value.length),
-            itemCount: entries.length,
-            itemBuilder: (BuildContext context, int index) {
-              return MemorialWidget(content: entries[index]);
-            })
-        //   FutureBuilder(
-        // future: _memoirals,
-        // builder: (context, snapshot) {
-        //   if (!snapshot.hasData) {
-        //     return const Center(
-        //       child: CircularProgressIndicator(),
-        //     );
-        //   }
-        //   final List memoirals = snapshot.data as List;
-        //   return ListView.builder(
-        //     padding: const EdgeInsets.all(8),
-        //     itemCount: memoirals.length,
-        //     itemBuilder: (BuildContext context, int index) {
-        //       return MemorialWidget(content: memoirals[index].content);
-        //     },
-        );
+        body: FutureBuilder(
+          future: _memorials,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // 데이터가 아직 로드 중인 경우 로딩 화면을 표시하거나 다른 처리를 할 수 있습니다.
+              return const Center(
+                  child: CircularProgressIndicator()); // 예시: 로딩 스피너를 표시
+            } else if (snapshot.hasError) {
+              // 데이터 로딩 중에 오류가 발생한 경우 오류 메시지를 표시하거나 다른 처리를 할 수 있습니다.
+              return Text('Error: ${snapshot.error}');
+            } else {
+              // 데이터가 성공적으로 로드된 경우 ListView를 표시합니다.
+              if (snapshot.data != null) {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return MemorialWidget(
+                      content: snapshot.data[index]['content'],
+                    );
+                  },
+                );
+              } else {
+                // 데이터가 null인 경우에 대한 처리를 할 수 있습니다.
+                return const Text('Data is null');
+              }
+            }
+          },
+        ));
   }
+}
+
+Future fetchArticle() async {
+  final data = await supabase.from('article').select();
+  return data;
 }

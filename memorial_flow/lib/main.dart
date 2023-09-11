@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memorial_flow/screens/login.screen.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
 import 'package:memorial_flow/screens/profile.screen.dart';
@@ -17,6 +16,8 @@ void main() async {
 
   runApp(const MyApp());
 }
+
+final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
