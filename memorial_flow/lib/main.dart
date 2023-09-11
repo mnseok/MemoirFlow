@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:memorial_flow/screens/login.screen.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
 import 'package:memorial_flow/screens/profile.screen.dart';
 import 'package:memorial_flow/screens/write.screen.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +25,6 @@ final supabase = Supabase.instance.client;
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,6 +56,22 @@ class _MyHomePageState extends State<MyHomePage> {
     const ProfileScreen(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+
+    // 로그인 상태 변경 감지
+    supabase.auth.onAuthStateChange.listen((user) {
+      if (user == null) {
+        // 로그인하지 않은 경우 로그인 화면으로 이동
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false, // 이전 화면들을 모두 삭제하고 새 화면으로 이동
+        );
+      }
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -63,22 +81,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          title: Text(
-            widget.title,
-            style: const TextStyle(
-                fontFamily: 'OoohBaby',
-                fontSize: 30,
-                fontWeight: FontWeight.w700),
-          ),
-
-          // leading: IconButton(
-          //     icon: Icon(Icons.menu), onPressed: () => {print("hi")}),
+      appBar: AppBar(
+        centerTitle: false,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+              fontFamily: 'OoohBaby',
+              fontSize: 30,
+              fontWeight: FontWeight.w700),
         ),
-        endDrawer: Drawer(
-            child: ListView(
+      ),
+      endDrawer: Drawer(
+        child: ListView(
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -107,38 +122,38 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ],
-        )),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      const Write(data: 'Write Screen mockup')),
-            );
-          },
-          tooltip: 'Increment',
-          child: const Icon(Icons.border_color),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
-
-        body: _widgetOptions.elementAt(_selectedIndex),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Main',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              label: 'Group',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ));
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Write(data: 'Write Screen mockup')),
+          );
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.border_color),
+      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Main',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Group',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
   }
 }

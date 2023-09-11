@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memorial_flow/main.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
-import 'dart:developer';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.date});
@@ -99,6 +98,9 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 Future fetchArticle() async {
-  final data = await supabase.from('article').select();
+  final data = await supabase
+      .from('article')
+      .select()
+      .eq('userId', supabase.auth.currentUser?.id);
   return data;
 }
