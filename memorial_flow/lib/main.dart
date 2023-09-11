@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:memorial_flow/screens/login.screen.dart';
@@ -23,7 +21,7 @@ void main() async {
 final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +32,15 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Memoir Flow'),
+      home: supabase.auth.currentUser == null
+          ? const LoginScreen()
+          : const MyHomePage(title: 'Memoir Flow'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title});
 
   final String title;
 
@@ -51,7 +51,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
-    const MainScreen(date: '3월 1일'),
+    const MainScreen(),
     const GroupScreen(),
     const ProfileScreen(),
   ];
@@ -59,17 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
-    // 로그인 상태 변경 감지
-    supabase.auth.onAuthStateChange.listen((user) {
-      if (user == null) {
-        // 로그인하지 않은 경우 로그인 화면으로 이동
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false, // 이전 화면들을 모두 삭제하고 새 화면으로 이동
-        );
-      }
-    });
   }
 
   void _onItemTapped(int index) {

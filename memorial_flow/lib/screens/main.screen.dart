@@ -3,17 +3,33 @@ import 'package:memorial_flow/main.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, required this.date});
+  const MainScreen({super.key});
 
-  final String date;
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final Future _memorials = fetchArticle();
+  DateTime _selectedDay = DateTime.now().subtract(
+    Duration(
+      hours: DateTime.now().hour,
+      minutes: DateTime.now().minute,
+      seconds: DateTime.now().second,
+      milliseconds: DateTime.now().millisecond,
+      microseconds: DateTime.now().microsecond,
+    ),
+  );
 
-  DateTime _selectedDay = DateTime.now();
+  Future fetchArticle() async {
+    print(_selectedDay);
+    final data = await supabase
+        .from('article')
+        .select()
+        .eq('userId', supabase.auth.currentUser?.id)
+        .gte('created_at', _selectedDay)
+        .lt('created_at', _selectedDay.add(const Duration(days: 1)));
+    return data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         body: FutureBuilder(
-          future: _memorials,
+          future: fetchArticle(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // 데이터가 아직 로드 중인 경우 로딩 화면을 표시하거나 다른 처리를 할 수 있습니다.
@@ -95,12 +111,4 @@ class _MainScreenState extends State<MainScreen> {
           },
         ));
   }
-}
-
-Future fetchArticle() async {
-  final data = await supabase
-      .from('article')
-      .select()
-      .eq('userId', supabase.auth.currentUser?.id);
-  return data;
 }
