@@ -11,6 +11,7 @@ import { MemorialService } from './memorial.service';
 import { CreateMemorialDto } from './dto/create.memorial.dto';
 import { ApiOperation } from '@nestjs/swagger';
 import { CustomDate } from 'src/common/types/customDate.type';
+import { MemorialType } from 'src/common/types/memorial.type';
 
 @Controller('memorial')
 export class MemorialController {
@@ -33,10 +34,11 @@ export class MemorialController {
   }
 
   @ApiOperation({ summary: 'Get memorials by user' })
-  @Get()
+  @Get(':memorialType')
   getMemorialsByUser(
     @Headers('Authorization') token: string,
     @Headers('Date') date: Date,
+    @Param('memorialType') memorialType: MemorialType,
   ) {
     const dateObj: CustomDate = {
       year: date.getFullYear(),
