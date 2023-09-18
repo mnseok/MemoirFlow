@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memorial_flow/screens/login.screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
-import 'package:memorial_flow/screens/group.screen.dart';
-import 'package:memorial_flow/screens/profile.screen.dart';
-import 'package:memorial_flow/screens/write.screen.dart';
+
+Future<void> refreshSession() async {
+  supabase.auth.signOut();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: 'assets/config/.env');
 
   await Supabase.initialize(
-    url: 'https://esrvbiydhlrulgpajcdk.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzcnZiaXlkaGxydWxncGFqY2RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1Mzg2NzIsImV4cCI6MjAwOTExNDY3Mn0.hXwAopE97t-m_SyhTIBUSInNCQYu3_Jpf6ny9ChDnB0',
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+
+  await refreshSession();
 
   runApp(const MyApp());
 }
@@ -21,26 +25,23 @@ void main() async {
 final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'First app',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-        primarySwatch: Colors.green,
-      ),
-      home: supabase.auth.currentUser == null
-          ? const LoginScreen()
-          : const MyHomePage(title: 'Memoir Flow'),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+          primarySwatch: Colors.green),
+      home: const MyHomePage(title: 'Memorial Flow'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -49,100 +50,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-  final List<Widget> _widgetOptions = <Widget>[
-    const MainScreen(),
-    const GroupScreen(),
-    const ProfileScreen(),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        title: Text(
-          widget.title,
-          style: const TextStyle(
-              fontFamily: 'OoohBaby',
-              fontSize: 30,
-              fontWeight: FontWeight.w700),
-        ),
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.green,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OoohBaby',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const Write(data: 'Write Screen mockup')),
-          );
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.border_color),
-      ),
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Main',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Group',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-    );
+    return supabase.auth.currentUser == null
+        ? const LoginScreen()
+        : const MainScreen();
   }
 }
