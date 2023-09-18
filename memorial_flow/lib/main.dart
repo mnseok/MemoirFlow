@@ -38,7 +38,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
-    MainScreen(date: '3월 1일'),
+    const MainScreen(date: '3월 1일'),
     const GroupScreen(),
     const ProfileScreen(),
   ];
