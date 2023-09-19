@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:memorial_flow/screens/articles.screen.dart';
 import 'package:memorial_flow/screens/group.screen.dart';
 import 'package:memorial_flow/screens/profile.screen.dart';
-import 'package:memorial_flow/screens/write.screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -41,6 +40,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

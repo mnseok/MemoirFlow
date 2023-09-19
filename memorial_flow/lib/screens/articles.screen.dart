@@ -108,41 +108,51 @@ class _ArticleScreenState extends State<ArticleScreen> {
             } else {
               // 데이터가 없을 경우 '작성한 글이 없습니다' 메시지를 표시합니다.
               return const Center(
-                child: Text(
-                  '작성한 글이 없습니다',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w300,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '작성한 기록이 없습니다',
+                      style: TextStyle(
+                          fontFamily: 'PretendardRegular',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black87),
+                    )
+                  ],
                 ),
               );
             }
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigator.push를 사용하여 WriteScreen으로 이동하고
-          // WriteScreen에서 작성한 데이터를 받아옵니다.
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WriteScreen(date: _selectedDay),
-            ),
-          );
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        width: 150,
+        height: 40,
+        child: FloatingActionButton(
+          onPressed: () async {
+            // Navigator.push를 사용하여 WriteScreen으로 이동하고
+            // WriteScreen에서 작성한 데이터를 받아옵니다.
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WriteScreen(date: _selectedDay),
+              ),
+            );
 
-          // WriteScreen에서 받아온 데이터(result)를 처리합니다.
-          if (result != null) {
-            // 데이터를 사용하여 ArticleScreen을 업데이트합니다.
-            // 예를 들어, fetchArticle()를 다시 호출하거나 상태를 업데이트합니다.
-            setState(() {
-              articles = fetchArticle();
-            });
-          }
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.border_color),
+            // WriteScreen에서 받아온 데이터(result)를 처리합니다.
+            if (result != null) {
+              // 데이터를 사용하여 ArticleScreen을 업데이트합니다.
+              // 예를 들어, fetchArticle()를 다시 호출하거나 상태를 업데이트합니다.
+              setState(() {
+                articles = fetchArticle();
+              });
+            }
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.border_color),
+        ),
       ),
     );
   }
