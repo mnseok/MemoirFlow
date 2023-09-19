@@ -39,17 +39,6 @@ class _MainScreenState extends State<MainScreen> {
               fontWeight: FontWeight.w700),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const Write(data: 'Write Screen mockup')),
-          );
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.border_color),
-      ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

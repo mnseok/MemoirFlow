@@ -1,59 +1,22 @@
+// write.screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:memorial_flow/constants.dart';
+import 'package:memorial_flow/main.dart';
 
 const double _kItemExtent = 32.0;
-const List<String> _timeperiod = <String>[
-  '00:00 ~ 02:00',
-  '02:00 ~ 04:00',
-  '04:00 ~ 06:00',
-  '06:00 ~ 08:00',
-  '08:00 ~ 10:00',
-  '10:00 ~ 12:00',
-  '12:00 ~ 14:00',
-  '14:00 ~ 16:00',
-  '16:00 ~ 18:00',
-  '18:00 ~ 20:00',
-  '20:00 ~ 22:00',
-  '22:00 ~ 24:00',
-];
 
-const List<int> _selectedIndexList = <int>[
-  0,
-  0,
-  1,
-  1,
-  2,
-  2,
-  3,
-  3,
-  4,
-  4,
-  5,
-  5,
-  6,
-  6,
-  7,
-  7,
-  8,
-  8,
-  9,
-  9,
-  10,
-  10,
-  11,
-  11,
-];
-
-class Write extends StatefulWidget {
-  const Write({super.key, required this.data});
-  final String data;
+class WriteScreen extends StatefulWidget {
+  const WriteScreen({super.key, required this.date});
+  final DateTime date;
   @override
-  State<Write> createState() => _WriteState();
+  State<WriteScreen> createState() => _WriteState();
 }
 
-class _WriteState extends State<Write> {
-  final currentTime = DateTime.now().hour;
-  late int _selectedFruit = _selectedIndexList[currentTime];
+class _WriteState extends State<WriteScreen> {
+  final now = DateTime.now();
+  late final currentTime = now.hour;
+  late int _selectedFruit = Constants.selectedIndexList[currentTime];
 
   // class를 생성할때 순차적으로 코드가 읽히는게 아니라 다 각자 실행되기 때문에 currentTime이 initialize
   // 된 상태가 아니다. late로 순서대로 변수가 초기화 될 수 있도록 했다.
@@ -90,9 +53,9 @@ class _WriteState extends State<Write> {
                       _selectedFruit = selectedItem;
                     });
                   },
-                  children:
-                      List<Widget>.generate(_timeperiod.length, (int index) {
-                    return Center(child: Text(_timeperiod[index]));
+                  children: List<Widget>.generate(
+                      Constants.timePeriodList.length, (int index) {
+                    return Center(child: Text(Constants.timePeriodList[index]));
                   }),
                 ),
               ),
@@ -101,6 +64,7 @@ class _WriteState extends State<Write> {
 
   @override
   Widget build(BuildContext context) {
+    String content = '';
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -121,8 +85,16 @@ class _WriteState extends State<Write> {
           actions: [
             IconButton(
               icon: const Icon(Icons.check),
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                await supabase.from('article').insert(
+                  {
+                    'timeType': _selectedFruit,
+                    'content': content,
+                    'date': widget.date.toString().split(" ")[0],
+                    'userId': supabase.auth.currentUser?.id,
+                  },
+                );
+                Navigator.pop(context, true); // 'true'는 데이터를 전달하는 예시입니다.
               },
             ),
           ]),
@@ -137,16 +109,19 @@ class _WriteState extends State<Write> {
               onPressed: () => _showDialog(),
               // This displays the selected time interval.
               child: Text(
-                _timeperiod[_selectedFruit],
+                Constants.timePeriodList[_selectedFruit],
                 style: const TextStyle(
                   fontSize: 30.0,
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
-                decoration: InputDecoration(
+                onChanged: (text) {
+                  content = text;
+                },
+                decoration: const InputDecoration(
                   labelText: 'Input',
                 ),
               ),

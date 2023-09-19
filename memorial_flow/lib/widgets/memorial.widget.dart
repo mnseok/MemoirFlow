@@ -1,19 +1,6 @@
+// memorial.widget.dart
 import 'package:flutter/material.dart';
-
-const List<String> _timeperiod = <String>[
-  '00:00 ~ 02:00',
-  '02:00 ~ 04:00',
-  '04:00 ~ 06:00',
-  '06:00 ~ 08:00',
-  '08:00 ~ 10:00',
-  '10:00 ~ 12:00',
-  '12:00 ~ 14:00',
-  '14:00 ~ 16:00',
-  '16:00 ~ 18:00',
-  '18:00 ~ 20:00',
-  '20:00 ~ 22:00',
-  '22:00 ~ 24:00',
-];
+import 'package:memorial_flow/constants.dart';
 
 class MemorialWidget extends StatelessWidget {
   const MemorialWidget({
@@ -29,9 +16,9 @@ class MemorialWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350,
+      width: 500,
       height: 150,
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -64,7 +51,7 @@ class MemorialWidget extends StatelessWidget {
                         fontWeight: FontWeight.w200),
                   ),
                   Text(
-                    _timeperiod[timeType].toString(),
+                    Constants.timePeriodList[timeType].toString(),
                     style: const TextStyle(
                         fontFamily: 'PretendardExtraLight',
                         fontSize: 15,
@@ -73,24 +60,29 @@ class MemorialWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: SizedBox(
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      content.toString(),
-                      style: const TextStyle(
-                          fontFamily: 'PretendardExtraLight',
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        content.toString(),
+                        style: const TextStyle(
+                            fontFamily: 'PretendardExtraLight',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
