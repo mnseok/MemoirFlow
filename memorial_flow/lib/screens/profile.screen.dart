@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:memorial_flow/main.dart';
 import 'package:memorial_flow/screens/login.screen.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late Map<String, dynamic>? userMetadata;
+  late String? avatarUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    userMetadata = supabase.auth.currentUser?.userMetadata;
+    avatarUrl = userMetadata?['avatar_url'];
+  }
 
   void signOutAndNavigateToLogin(BuildContext context) async {
     await Supabase.instance.client.auth.signOut();
@@ -16,35 +32,42 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  void userMetadataPrint() {
+    print(userMetadata);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentUser = Supabase.instance.client.auth.currentUser;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('프로필'),
-      ),
-      body: Center(
-        child: currentUser != null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    // 이메일 표시
-                    '${currentUser.email}',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: avatarUrl == null
+                        ? null
+                        : DecorationImage(
+                            image: NetworkImage(avatarUrl!),
+                            fit: BoxFit.cover, // 이미지를 적절하게 표시하도록 fit 속성 추가
+                          ),
                   ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () =>
-                        signOutAndNavigateToLogin(context), // context를 전달
-                    child: const Text('로그아웃'),
-                  ),
-                ],
-              )
-            : const LoginScreen(),
+                  width: 100,
+                  height: 100,
+                ),
+                Column(
+                  children: [
+                    Text('${userMetadata?['preferred_username']}'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // ...
+        ],
       ),
     );
   }

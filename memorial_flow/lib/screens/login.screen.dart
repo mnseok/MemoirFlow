@@ -38,19 +38,14 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   SupaSocialsAuth(
-                    socialProviders: const [
-                      SocialProviders.github,
-                    ],
+                    socialProviders: const [SocialProviders.github],
                     colored: true,
                     onSuccess: (Session response) {
-                      // 로그인 성공 후 메인 화면으로 이동
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            const MyApp(), // MainScreen을 실제 화면으로 대체해야 합니다.
-                      ));
-                    },
-                    onError: (error) {
-                      // 로그인 오류 처리
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const MyApp(),
+                        ),
+                      );
                     },
                   ),
                 ],

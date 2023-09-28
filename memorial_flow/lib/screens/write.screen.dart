@@ -1,4 +1,5 @@
 // write.screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:memorial_flow/constants.dart';
@@ -94,7 +95,7 @@ class _WriteState extends State<WriteScreen> {
                     'userId': supabase.auth.currentUser?.id,
                   },
                 );
-                Navigator.pop(context, true); // 'true'는 데이터를 전달하는 예시입니다.
+                Navigator.pop(context, true);
               },
             ),
           ]),

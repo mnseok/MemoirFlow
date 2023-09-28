@@ -5,7 +5,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:memorial_flow/screens/main.screen.dart';
 
 Future<void> refreshSession() async {
-  supabase.auth.signOut();
+  if (supabase.auth.currentSession == null) {
+    supabase.auth.refreshSession();
+  }
 }
 
 void main() async {

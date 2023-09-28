@@ -1,7 +1,6 @@
 // article.screen.dart
 import 'package:flutter/material.dart';
 import 'package:memorial_flow/main.dart';
-import 'package:memorial_flow/models/memorial.model.dart';
 import 'package:memorial_flow/screens/write.screen.dart';
 import 'package:memorial_flow/widgets/memorial.widget.dart';
 
@@ -75,8 +74,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     .add(const Duration(days: 1))
                     .isBefore(DateTime.now())) {
                   _selectedDay = _selectedDay.add(const Duration(days: 1));
+                  articles = fetchArticle();
                 }
-                articles = fetchArticle();
               });
             },
           ),
